@@ -1,4 +1,4 @@
-name: Build EnxyAbilities
+name: Build IniEditor
 
 on:
   push:
