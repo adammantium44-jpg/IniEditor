@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+    <div class="modal-status ms-success">
+        <div class="m-hd">
+            <div class="ms-icon">⚡</div>
+            <h3>ENXY ABILITIES // CONFIGURATION</h3>
+        </div>
+
+        <div class="m-bd">
+            <!-- HOTKEYS SECTION -->
+            <div class="setting-group">
+                <h4>🎮 HOTKEYS</h4>
+                
+                <div class="setting-item">
+                    <label>SPRINT SKILL</label>
+                    <input type="text" id="hotkey-sprint" class="hotkey-input" placeholder="Click to set..." readonly>
+                </div>
+
+                <div class="setting-item">
+                    <label>BLINK SKILL</label>
+                    <input type="text" id="hotkey-blink" class="hotkey-input" placeholder="Click to set..." readonly>
+                </div>
+
+                <div class="setting-item">
+                    <label>INVISIBLE SKILL</label>
+                    <input type="text" id="hotkey-invisible" class="hotkey-input" placeholder="Click to set..." readonly>
+                </div>
+            </div>
+
+            <!-- TOGGLES SECTION -->
+            <div class="setting-group">
+                <h4>⚙️ SKILL TOGGLE</h4>
+
+                <div class="setting-item">
+                    <label class="sw">
+                        <input type="checkbox" class="sw__chk" id="enable-sprint" checked>
+                        <div class="sw__track">
+                            <div class="sw__knob"></div>
+                        </div>
+                        <span style="margin-left: 10px;">ENABLE SPRINT</span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <label class="sw">
+                        <input type="checkbox" class="sw__chk" id="enable-blink" checked>
+                        <div class="sw__track">
+                            <div class="sw__knob"></div>
+                        </div>
+                        <span style="margin-left: 10px;">ENABLE BLINK</span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <label class="sw">
+                        <input type="checkbox" class="sw__chk" id="enable-invisible" checked>
+                        <div class="sw__track">
+                            <div class="sw__knob"></div>
+                        </div>
+                        <span style="margin-left: 10px;">ENABLE INVISIBLE</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- SPRINT SETTINGS -->
+            <div class="setting-group">
+                <h4>🔥 SPRINT SETTINGS</h4>
+
+                <div class="setting-item">
+                    <label>DURATION (SECONDS)</label>
+                    <input type="range" id="sprint-duration" min="1" max="30" step="1" value="5">
+                    <span id="duration-val">5s</span>
+                </div>
+
+                <div class="setting-item">
+                    <label>SPEED MULTIPLIER (%)</label>
+                    <input type="range" id="sprint-speed" min="25" max="300" step="5" value="75">
+                    <span id="speed-val">75%</span>
+                </div>
+
+                <!-- Preview -->
+                <div class="preview-box">
+                    <span class="preview-icon">🏃‍♂️💨</span>
+                    <span>Total Speed: <strong id="preview-speed">175%</strong> for <strong id="preview-duration">5s</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-ft">
+            <button class="btn" onclick="saveSettings()">SAVE SETTINGS</button>
+            <button class="btn btn-secondary" onclick="resetSettings()">RESET TO DEFAULT</button>
+        </div>
+    </div>
+    <script src="settings.js"></script>
+</body>
+</html>
