@@ -14,7 +14,6 @@ namespace {
 
     void Log(const std::string& msg)
     {
-        // kalau kamu punya logger sendiri, ganti di sini
         logger::info("[IniEditor] {}", msg);
     }
 }
@@ -28,22 +27,28 @@ namespace IniEditorUI {
             return;
         }
 
+        // key wajib unik per plugin
         SKSEMenuFramework::Model::Internal::key = "IniEditor";
 
-        EditorWindow = SKSEMenuFramework::AddWindow(
-            &RenderEditorWindow,
-            true // pause game, sama seperti SimpleTextViewer
-        );
+        // window utama editor
+        EditorWindow = SKSEMenuFramework::AddWindow(RenderEditorWindow, true);
+        if (!EditorWindow) {
+            Log("Failed to create EditorWindow");
+        }
 
-        SKSEMenuFramework::AddSectionItem("Ini Editor", &RenderExplorer);
+        // section di menu kiri
+        SKSEMenuFramework::AddSectionItem("IniEditor", RenderExplorer);
 
-        RefreshFileList();
-        LoadCurrentFile();
+        // Untuk keamanan: jangan langsung load di sini
+        // Biar user klik Refresh dulu supaya kelihatan kalau ada error
+        // RefreshFileList();
+        // LoadCurrentFile();
     }
 
     void RefreshFileList()
     {
         FileList.clear();
+        CurrentOpenFile.clear();
 
         const std::filesystem::path root{ RootFolder };
         if (!std::filesystem::exists(root)) {
@@ -51,7 +56,8 @@ namespace IniEditorUI {
             return;
         }
 
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) {
+        // Lebih aman: non-recursive dulu, baru nanti kalau mau bisa diganti recursive
+        for (const auto& entry : std::filesystem::directory_iterator(root)) {
             if (!entry.is_regular_file()) {
                 continue;
             }
@@ -64,6 +70,9 @@ namespace IniEditorUI {
 
         if (!FileList.empty()) {
             CurrentOpenFile = FileList.front();
+            Log("Initial file: " + CurrentOpenFile.string());
+        } else {
+            Log("No ini files found in root folder");
         }
     }
 
@@ -73,7 +82,13 @@ namespace IniEditorUI {
         Floats.clear();
         Strings.clear();
 
-        if (CurrentOpenFile.empty() || !std::filesystem::is_regular_file(CurrentOpenFile)) {
+        if (CurrentOpenFile.empty()) {
+            Log("LoadCurrentFile called with empty CurrentOpenFile");
+            return;
+        }
+
+        if (!std::filesystem::is_regular_file(CurrentOpenFile)) {
+            Log("CurrentOpenFile is not a regular file: " + CurrentOpenFile.string());
             return;
         }
 
@@ -126,11 +141,14 @@ namespace IniEditorUI {
 
             Strings[key] = value;
         }
+
+        Log("Loaded file: " + CurrentOpenFile.string());
     }
 
     void SaveCurrentFile()
     {
         if (CurrentOpenFile.empty()) {
+            Log("SaveCurrentFile called with empty CurrentOpenFile");
             return;
         }
 
@@ -151,13 +169,15 @@ namespace IniEditorUI {
         for (const auto& [key, value] : Strings) {
             file << key << " = " << value << '\n';
         }
+
+        Log("Saved file: " + CurrentOpenFile.string());
     }
 
     // === RENDER ===
 
     void __stdcall RenderExplorer()
     {
-        ImGui::Text("Ini Editor");
+        ImGui::Text("IniEditor");
         ImGui::Separator();
 
         if (ImGui::Button("Refresh list")) {
@@ -189,6 +209,11 @@ namespace IniEditorUI {
     void __stdcall RenderEditorWindow()
     {
         if (!EditorWindow || !EditorWindow->IsOpen) {
+            return;
+        }
+
+        if (CurrentOpenFile.empty()) {
+            ImGui::Text("No file selected.");
             return;
         }
 
