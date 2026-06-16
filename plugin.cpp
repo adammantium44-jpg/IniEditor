@@ -1,18 +1,22 @@
 #include "PCH.h"
-#include "IniEditor.h"
-#include "SKSEMenuFramework.h"
+#include "Plugin.h"
+#include "IniEditorUI.h"
 
-// Macro SKSEPluginLoad biasanya diexpand jadi:
-// extern "C" __declspec(dllexport) bool SKSEPlugin_Load(const SKSE::LoadInterface* skse)
-SKSEPluginLoad(const SKSE::LoadInterface* skse)
+using namespace SKSE;
+
+void OnMessage(SKSE::MessagingInterface::Message* msg)
 {
-    // Inisialisasi CommonLibSSE-NG
-    SKSE::Init(skse);
+    if (msg->type == SKSE::MessagingInterface::kPostLoad) {
+        IniEditorUI::Register();
+    }
+}
 
-    // Dulu di sini ada WritePMCMConfig(); (Prisma/PMCM) -> tidak dipakai lagi, jadi dihapus
+extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const LoadInterface* skse)
+{
+    Init(skse);
 
-    // Registrasi menu ke SKSE Menu Framework
-    IniEditor::RegisterMenu();
+    auto messaging = GetMessagingInterface();
+    messaging->RegisterListener("SKSE", OnMessage);
 
     return true;
 }
