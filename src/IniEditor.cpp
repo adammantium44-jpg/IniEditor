@@ -7,6 +7,12 @@
 #include <cctype>
 #include <imgui.h>
 
+// Fungsi global, signature cocok dengan RenderFunction
+void __stdcall IniEditor_RenderPage()
+{
+    IniEditor::DrawPage();
+}
+
 // ---------------- Register & scanning ----------------
 
 void IniEditor::RegisterMenu()
@@ -24,14 +30,8 @@ void IniEditor::RegisterMenu()
         LoadIni();
     }
 
-    // Daftarkan RenderPage (signature __stdcall, free/static function)
-    SKSEMenuFramework::AddSectionItem("General", &IniEditor::RenderPage);
-}
-
-void __stdcall IniEditor::RenderPage()
-{
-    // Wrapper supaya signature cocok dengan RenderFunction
-    DrawPage();
+    // Daftarkan fungsi global, bukan member function
+    SKSEMenuFramework::AddSectionItem("General", &IniEditor_RenderPage);
 }
 
 void IniEditor::ScanIniFiles()
@@ -55,11 +55,11 @@ void IniEditor::ScanIniFiles()
     }
 }
 
-// ---------------- UI ----------------
+// ---------------- UI (TEST) ----------------
 
 void IniEditor::DrawPage()
 {
-    ImGui::Text("Test");
+    ImGui::Text("IniEditor test");
 }
 
 // ---------------- INI load/save ----------------
@@ -74,7 +74,6 @@ void IniEditor::LoadIni()
         return;
     }
 
-    // Kalau path bukan file biasa, jangan apa-apa
     if (!std::filesystem::is_regular_file(s_selectedIni)) {
         return;
     }
@@ -95,7 +94,6 @@ void IniEditor::LoadIni()
         if (line.empty()) {
             continue;
         }
-        // komentar
         if (line[0] == ';' || line[0] == '#') {
             continue;
         }
@@ -142,17 +140,14 @@ void IniEditor::SaveIni()
         return;
     }
 
-    // Bools
     for (const auto& [key, value] : s_bools) {
         file << key << " = " << (value ? "true" : "false") << '\n';
     }
 
-    // Floats
     for (const auto& [key, value] : s_floats) {
         file << key << " = " << value << '\n';
     }
 
-    // Strings
     for (const auto& [key, value] : s_strings) {
         file << key << " = " << value << '\n';
     }

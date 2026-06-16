@@ -9,14 +9,9 @@ class IniEditor
 {
 public:
     static void RegisterMenu();
+    static void DrawPage(); // implementasi UI
 
 private:
-    // Fungsi yang di-register ke SKSE Menu Framework
-    static void __stdcall RenderPage();
-
-    // Implementasi UI sebenarnya
-    static void DrawPage();
-
     static void ScanIniFiles();
     static void LoadIni();
     static void SaveIni();
@@ -28,3 +23,6 @@ private:
     static inline std::map<std::string, float> s_floats{};
     static inline std::map<std::string, std::string> s_strings{};
 };
+
+// Fungsi global yang di-register ke SKSE Menu Framework
+void __stdcall IniEditor_RenderPage();
