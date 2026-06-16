@@ -1,10 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "dependencies": [
-    {
-      "name": "commonlibsse-ng",
-      "default-features": false,
-      "features": [ "se", "ae", "vr", "fmt-bundled" ]
-    }
+    "commonlibsse-ng"
   ]
 }
