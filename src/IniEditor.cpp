@@ -52,11 +52,26 @@ void IniEditor::ScanIniFiles()
 
 void IniEditor::DrawPage()
 {
-    // Dropdown pilih file INI
-    const char* currentLabel = s_selectedIni.empty()
-        ? "<tidak ada>"
-        : std::filesystem::path(s_selectedIni).filename().string().c_str();
+    // Pastikan daftar file selalu sinkron
+    if (s_iniFiles.empty()) {
+        ScanIniFiles();
+        if (!s_iniFiles.empty() && s_selectedIni.empty()) {
+            s_selectedIni = s_iniFiles.front();
+            LoadIni();
+        }
+    }
 
+    // Label saat ini: simpan ke std::string supaya lifetime aman
+    std::string currentName;
+    if (s_selectedIni.empty()) {
+        currentName = "<tidak ada>";
+    } else {
+        currentName = std::filesystem::path(s_selectedIni).filename().string();
+    }
+
+    const char* currentLabel = currentName.c_str();
+
+    // Dropdown pilih file INI
     if (ImGui::BeginCombo("Pilih INI", currentLabel)) {
         for (const auto& fullPath : s_iniFiles) {
             bool isSelected = (fullPath == s_selectedIni);
@@ -105,6 +120,7 @@ void IniEditor::DrawPage()
     if (!s_strings.empty()) {
         ImGui::Text("Strings");
         for (auto& [key, value] : s_strings) {
+            // Buffer sementara per-key
             char buffer[256];
             std::snprintf(buffer, sizeof(buffer), "%s", value.c_str());
             if (ImGui::InputText(key.c_str(), buffer, sizeof(buffer))) {
@@ -132,6 +148,11 @@ void IniEditor::LoadIni()
     s_strings.clear();
 
     if (s_selectedIni.empty()) {
+        return;
+    }
+
+    // Kalau path bukan file biasa, jangan apa-apa
+    if (!std::filesystem::is_regular_file(s_selectedIni)) {
         return;
     }
 
