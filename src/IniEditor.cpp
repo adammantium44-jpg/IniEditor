@@ -83,7 +83,7 @@ void IniEditor::DrawPage()
     ImGui::Text("File: %s", s_selectedIni.c_str());
     ImGui::Separator();
 
-    // Editor: bools
+    // Booleans
     if (!s_bools.empty()) {
         ImGui::Text("Booleans");
         for (auto& [key, value] : s_bools) {
@@ -92,7 +92,7 @@ void IniEditor::DrawPage()
         ImGui::Separator();
     }
 
-    // Editor: floats
+    // Floats
     if (!s_floats.empty()) {
         ImGui::Text("Floats");
         for (auto& [key, value] : s_floats) {
@@ -101,11 +101,10 @@ void IniEditor::DrawPage()
         ImGui::Separator();
     }
 
-    // Editor: strings
+    // Strings
     if (!s_strings.empty()) {
         ImGui::Text("Strings");
         for (auto& [key, value] : s_strings) {
-            // Buffer sementara
             char buffer[256];
             std::snprintf(buffer, sizeof(buffer), "%s", value.c_str());
             if (ImGui::InputText(key.c_str(), buffer, sizeof(buffer))) {
@@ -115,7 +114,6 @@ void IniEditor::DrawPage()
         ImGui::Separator();
     }
 
-    // Tombol Save & Reset
     if (ImGui::Button("Save")) {
         SaveIni();
     }

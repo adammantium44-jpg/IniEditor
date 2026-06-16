@@ -51,6 +51,21 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     _UNICODE
 )
 
+# --- Dear ImGui (from extern/imgui) ---
+add_library(imgui STATIC
+    extern/imgui/imgui.cpp
+    extern/imgui/imgui_draw.cpp
+    extern/imgui/imgui_tables.cpp
+    extern/imgui/imgui_widgets.cpp
+)
+
+target_include_directories(imgui PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui"
+    "${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/imstb"
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
+
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
 
