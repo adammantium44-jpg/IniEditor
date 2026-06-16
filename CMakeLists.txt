@@ -64,6 +64,21 @@ set_target_properties(SKSEMenuFramework PROPERTIES
     IMPORTED_IMPLIB "${SKSEMFFRAMEWORK_LIB_DIR}/SKSEMenuFramework.lib"
 )
 
+# --- Dear ImGui (built from source in this repo) ---
+add_library(imgui STATIC
+    imgui.cpp
+    imgui_draw.cpp
+    imgui_tables.cpp
+    imgui_widgets.cpp
+    imgui_demo.cpp
+)
+target_include_directories(imgui PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/extern/imstb"
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
+
 target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
