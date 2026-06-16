@@ -24,7 +24,14 @@ void IniEditor::RegisterMenu()
         LoadIni();
     }
 
-    SKSEMenuFramework::AddSectionItem("General", &IniEditor::DrawPage);
+    // Daftarkan RenderPage (signature __stdcall, free/static function)
+    SKSEMenuFramework::AddSectionItem("General", &IniEditor::RenderPage);
+}
+
+void __stdcall IniEditor::RenderPage()
+{
+    // Wrapper supaya signature cocok dengan RenderFunction
+    DrawPage();
 }
 
 void IniEditor::ScanIniFiles()
@@ -52,7 +59,6 @@ void IniEditor::ScanIniFiles()
 
 void IniEditor::DrawPage()
 {
-    // Pastikan daftar file selalu sinkron
     if (s_iniFiles.empty()) {
         ScanIniFiles();
         if (!s_iniFiles.empty() && s_selectedIni.empty()) {
@@ -61,7 +67,6 @@ void IniEditor::DrawPage()
         }
     }
 
-    // Label saat ini: simpan ke std::string supaya lifetime aman
     std::string currentName;
     if (s_selectedIni.empty()) {
         currentName = "<tidak ada>";
@@ -71,7 +76,6 @@ void IniEditor::DrawPage()
 
     const char* currentLabel = currentName.c_str();
 
-    // Dropdown pilih file INI
     if (ImGui::BeginCombo("Pilih INI", currentLabel)) {
         for (const auto& fullPath : s_iniFiles) {
             bool isSelected = (fullPath == s_selectedIni);
@@ -98,7 +102,6 @@ void IniEditor::DrawPage()
     ImGui::Text("File: %s", s_selectedIni.c_str());
     ImGui::Separator();
 
-    // Booleans
     if (!s_bools.empty()) {
         ImGui::Text("Booleans");
         for (auto& [key, value] : s_bools) {
@@ -107,7 +110,6 @@ void IniEditor::DrawPage()
         ImGui::Separator();
     }
 
-    // Floats
     if (!s_floats.empty()) {
         ImGui::Text("Floats");
         for (auto& [key, value] : s_floats) {
@@ -116,11 +118,9 @@ void IniEditor::DrawPage()
         ImGui::Separator();
     }
 
-    // Strings
     if (!s_strings.empty()) {
         ImGui::Text("Strings");
         for (auto& [key, value] : s_strings) {
-            // Buffer sementara per-key
             char buffer[256];
             std::snprintf(buffer, sizeof(buffer), "%s", value.c_str());
             if (ImGui::InputText(key.c_str(), buffer, sizeof(buffer))) {
