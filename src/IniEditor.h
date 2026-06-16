@@ -24,5 +24,5 @@ private:
     static inline std::map<std::string, std::string> s_strings{};
 };
 
-// Fungsi global yang di-register ke SKSE Menu Framework
+// fungsi global dengan signature yang cocok dengan Model::RenderFunction
 void __stdcall IniEditor_RenderPage();

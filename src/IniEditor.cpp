@@ -7,7 +7,7 @@
 #include <cctype>
 #include <imgui.h>
 
-// Fungsi global, signature cocok dengan RenderFunction
+// Fungsi global yang dipanggil SKSE Menu Framework
 void __stdcall IniEditor_RenderPage()
 {
     IniEditor::DrawPage();
@@ -21,6 +21,7 @@ void IniEditor::RegisterMenu()
         return;
     }
 
+    // Set key section ke "IniEditor"
     SKSEMenuFramework::Model::Internal::key = "IniEditor";
 
     ScanIniFiles();
@@ -30,7 +31,7 @@ void IniEditor::RegisterMenu()
         LoadIni();
     }
 
-    // Daftarkan fungsi global, bukan member function
+    // Pakai helper dari header SimpleTextViewer
     SKSEMenuFramework::AddSectionItem("General", &IniEditor_RenderPage);
 }
 
@@ -55,7 +56,7 @@ void IniEditor::ScanIniFiles()
     }
 }
 
-// ---------------- UI (TEST) ----------------
+// ---------------- UI (TEST DULU) ----------------
 
 void IniEditor::DrawPage()
 {
