@@ -1,5 +1,5 @@
 #include "PCH.h"
-#include "PrismaConfig.h"
+#include "IniEditor.h"
 #include "SKSEMenuFramework.h"
 
 SKSEPluginLoad(const SKSE::LoadInterface*)
