@@ -24,26 +24,8 @@ void IniEditor::RegisterMenu()
 
 void IniEditor::DrawPage()
 {
-    // Untuk sekarang, simple test UI
-    // Di SKSE Menu Framework, ImGui context sudah di-setup
-
-    ImGui::Text("Ini Editor - test page");
-
-    // Contoh dummy control
-    static bool exampleBool = false;
-    static float exampleFloat = 1.0f;
-
-    if (ImGui::Checkbox("Example toggle", &exampleBool)) {
-        // Nanti bisa update s_bools["ExampleToggle"] dan SaveIni()
-    }
-
-    if (ImGui::SliderFloat("Example value", &exampleFloat, 0.0f, 10.0f)) {
-        // Nanti bisa update s_floats["ExampleValue"] dan SaveIni()
-    }
-
-    if (ImGui::Button("Save INI")) {
-        SaveIni();
-    }
+    // Untuk sementara, kosongkan. SKSE Menu Framework akan tetap memanggil fungsi ini,
+    // tapi kita belum menggambar apa-apa sampai ImGui-nya di-handle dengan benar.
 }
 
 void IniEditor::LoadIni()
