@@ -1,37 +1,60 @@
 #include "PCH.h"
 #include "IniEditor.h"
 
+// ImGui (exposed via SKSE Menu Framework)
+#include <imgui.h>
+
 void IniEditor::RegisterMenu()
 {
+    // Pastikan framework terinstall
     if (!SKSEMenuFramework::IsInstalled()) {
         return;
     }
 
-    // Contoh API, nanti kita sesuaikan dengan versi framework kamu
-    // Misal untuk SKSE Menu Framework 2:
-    // SKSEMenuFramework::RegisterMenu("Ini Editor", &IniEditor::DrawPage);
+    // Set root key menu kita, misal "IniEditor"
+    SKSEMenuFramework::Model::Internal::key = "IniEditor";
 
-    // TODO: cek Usage.md dari SDK dan sesuaikan pemanggilan di sini
+    // Daftarkan satu section item, misal "General"
+    SKSEMenuFramework::AddSectionItem("General", &IniEditor::DrawPage);
+
+    // Nanti kalau mau banyak page:
+    // SKSEMenuFramework::AddSectionItem("Gameplay", &IniEditor::DrawGameplayPage);
+    // SKSEMenuFramework::AddSectionItem("UI", &IniEditor::DrawUIPage);
 }
 
 void IniEditor::DrawPage()
 {
-    // Untuk test awal, cukup gambar text statis
-    if (!ImGui::Begin("Ini Editor")) {
-        ImGui::End();
-        return;
+    // Untuk sekarang, simple test UI
+    // Di SKSE Menu Framework, ImGui context sudah di-setup
+
+    ImGui::Text("Ini Editor - test page");
+
+    // Contoh dummy control
+    static bool exampleBool = false;
+    static float exampleFloat = 1.0f;
+
+    if (ImGui::Checkbox("Example toggle", &exampleBool)) {
+        // Nanti bisa update s_bools["ExampleToggle"] dan SaveIni()
     }
 
-    ImGui::Text("Ini Editor is working.");
-    ImGui::End();
+    if (ImGui::SliderFloat("Example value", &exampleFloat, 0.0f, 10.0f)) {
+        // Nanti bisa update s_floats["ExampleValue"] dan SaveIni()
+    }
+
+    if (ImGui::Button("Save INI")) {
+        SaveIni();
+    }
 }
 
 void IniEditor::LoadIni()
 {
-    // Stub, nanti diisi
+    // TODO: implementasikan parsing .ini
+    // s_iniPath = "Data/SKSE/Plugins/YourMod.ini";
+    // Baca file, isi s_bools/s_floats/s_strings
 }
 
 void IniEditor::SaveIni()
 {
-    // Stub, nanti diisi
+    // TODO: implementasikan penulisan .ini
+    // Simpan s_bools/s_floats/s_strings ke s_iniPath
 }
