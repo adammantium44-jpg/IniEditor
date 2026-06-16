@@ -48,6 +48,22 @@ add_commonlibsse_plugin(${PROJECT_NAME}
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
 
+# --- SKSE Menu Framework ---
+set(SKSEMFFRAMEWORK_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/SKSEMenuFramework/lib")
+
+add_library(SKSEMenuFramework SHARED IMPORTED GLOBAL)
+
+set_target_properties(SKSEMenuFramework PROPERTIES
+    IMPORTED_LOCATION "${SKSEMFFRAMEWORK_LIB_DIR}/SKSEMenuFramework.dll"
+    IMPORTED_IMPLIB "${SKSEMFFRAMEWORK_LIB_DIR}/SKSEMenuFramework.lib"
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    "${SKSEMFFRAMEWORK_LIB_DIR}"
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE SKSEMenuFramework)
+
 # When your SKSE .dll is compiled, this will automatically copy the .dll into your mods folder.
 # Only works if you configure DEPLOY_ROOT above (or set the SKYRIM_MODS_FOLDER environment variable)
 if(DEFINED OUTPUT_FOLDER)
