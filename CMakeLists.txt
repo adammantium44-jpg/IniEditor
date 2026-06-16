@@ -45,6 +45,12 @@ add_commonlibsse_plugin(${PROJECT_NAME}
         plugin.cpp
         PrismaConfig.cpp
 ) # <--- specifies plugin.cpp
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    UNICODE
+    _UNICODE
+)
+
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
 
