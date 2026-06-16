@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.21)
 
 # [BEGIN set_project_name]
 # Set your project name. This will be the name of your SKSE .dll file.
-project(EnxyAbilities VERSION 1.0.0 LANGUAGES CXX)
+project(IniEditor VERSION 1.0.0 LANGUAGES CXX)
 set(VCPKG_TARGET_TRIPLET "x64-windows-static-md")
 
 # [END set_project_name]
