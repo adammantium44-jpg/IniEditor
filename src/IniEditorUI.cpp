@@ -21,29 +21,20 @@ namespace {
 namespace IniEditorUI {
 
     void Register()
-    {
-        if (!SKSEMenuFramework::IsInstalled()) {
-            Log("SKSE Menu Framework not installed, skipping UI registration");
-            return;
-        }
-
-        // key wajib unik per plugin
-        SKSEMenuFramework::Model::Internal::key = "IniEditor";
-
-        // window utama editor
-        EditorWindow = SKSEMenuFramework::AddWindow(RenderEditorWindow, true);
-        if (!EditorWindow) {
-            Log("Failed to create EditorWindow");
-        }
-
-        // section di menu kiri
-        SKSEMenuFramework::AddSectionItem("IniEditor", RenderExplorer);
-
-        // Untuk keamanan: jangan langsung load di sini
-        // Biar user klik Refresh dulu supaya kelihatan kalau ada error
-        // RefreshFileList();
-        // LoadCurrentFile();
+{
+    if (!SKSEMenuFramework::IsInstalled()) {
+        Log("SKSE Menu Framework not installed, skipping UI registration");
+        return;
     }
+
+    // ⚡ PERBAIKAN: Hapus baris manual Internal::key
+
+    // Jendela utama (Framework menangani nama/key secara otomatis)
+    EditorWindow = SKSEMenuFramework::AddWindow(RenderEditorWindow, true);
+    
+    // Bagian section
+    SKSEMenuFramework::AddSectionItem("IniEditor", RenderExplorer);
+}
 
     void RefreshFileList()
     {
