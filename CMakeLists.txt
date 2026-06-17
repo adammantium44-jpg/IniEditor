@@ -17,7 +17,7 @@ find_package(CommonLibSSE CONFIG REQUIRED)
 add_commonlibsse_plugin(${PROJECT_NAME}
     SOURCES
         plugin.cpp
-        src/IniEditor.cpp
+        src/IniEditorUi.cpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
