@@ -28,6 +28,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h)
 
+target_include_directories(${PROJECT_NAME} PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
 # --- Dear ImGui (from extern/imgui) ---
 add_library(imgui STATIC
     extern/imgui/imgui.cpp
