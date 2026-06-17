@@ -1,0 +1,44 @@
+name: Build IniEditor
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache vcpkg & Build Folder
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            build/vcpkg_installed
+            vcpkg_installed
+            AppData/Local/vcpkg/archives
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json', 'CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
+
+      - uses: microsoft/setup-msbuild@v2
+      - uses: lukka/get-cmake@latest
+      - uses: lukka/run-vcpkg@v11
+
+      - name: Configure
+        shell: cmd
+        run: |
+          cmake -B build -S . -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake
+
+      - name: Build
+        shell: cmd
+        run: |
+          cmake --build build --config Release
+
+      - name: Upload DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: IniEditor
+          path: build/**/*.dll
